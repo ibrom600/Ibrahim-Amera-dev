@@ -15,6 +15,22 @@ export default function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [particles, setParticles] = useState([]);
+
+  // Generate random particle styles strictly on the client to prevent hydration mismatch
+  useEffect(() => {
+    const generatedParticles = Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      animationDelay: `${Math.random() * 5}s`,
+      animationDuration: `${5 + Math.random() * 5}s`,
+      width: `${4 + Math.random() * 6}px`,
+      height: `${4 + Math.random() * 6}px`,
+    }));
+
+    setParticles(generatedParticles);
+  }, []);
 
   useEffect(() => {
     const currentRole = roles[roleIndex];
@@ -64,17 +80,17 @@ export default function Hero() {
   return (
     <section id="hero" className={styles.hero}>
       <div className={styles.particles}>
-        {[...Array(20)].map((_, i) => (
+        {particles.map((particle) => (
           <div
-            key={i}
+            key={particle.id}
             className={styles.particle}
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${5 + Math.random() * 5}s`,
-              width: `${4 + Math.random() * 6}px`,
-              height: `${4 + Math.random() * 6}px`,
+              left: particle.left,
+              top: particle.top,
+              animationDelay: particle.animationDelay,
+              animationDuration: particle.animationDuration,
+              width: particle.width,
+              height: particle.height,
             }}
           />
         ))}
